@@ -95,12 +95,17 @@
 						// TODO: watch resize events for relayout?
 						var lastWidth = element.offsetWidth;
 						var lastHeight = element.offsetHeight;
+						// Mainly because null if this, or any parent is set to display: none
+						// https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+						var lastParent = element.offsetParent;
 						var updateOnResize = function() {
 							if(!element.gridLayout) { return; }
-							if(lastWidth != element.offsetWidth || lastHeight != element.offsetHeight) {
+							if(lastWidth != element.offsetWidth || lastHeight != element.offsetHeight || 
+									lastParent !== element.offsetParent) {
 								// update last known size
 								lastWidth = element.offsetWidth;
 								lastHeight = element.offsetHeight;
+								lastParent = element.offsetParent;
 								// relayout (and prevent double-dispatch)
 								element.gridLayout.scheduleRelayout();
 							}
